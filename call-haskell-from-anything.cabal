@@ -24,9 +24,9 @@ extra-source-files:
   test.rb
 
 
--- source-repository head
---   type: git
---   location: git://github.com/ailrk/call-haskell-from-anything.git
+source-repository head
+  type: git
+  location: git://github.com/ailrk/call-haskell-from-anything.git
 
 
 library

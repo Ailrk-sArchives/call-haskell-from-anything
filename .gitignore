@@ -1,7 +1,8 @@
-dist
-cabal-dev
-*.o
-*.hi
-*.chi
-*.chs.h
-.virthualenv
+.stack-work/
+dist-newstyle/
+result/
+.ccls-cache/
+some-git-ignore-files/
+*~
+
+a.out

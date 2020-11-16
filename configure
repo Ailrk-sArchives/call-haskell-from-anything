@@ -1,6 +1,14 @@
 #!/usr/bin/env sh
 
-# Pass all arguments that cabal passes us to the python script.
-pwd
-ls -al
+# With new cabal configure file can't see the python script, so we just write a simple shell script directly.
+
+echo "Determining GHC Version:\n"
+$GHC_VERSION=$(ghc -v | python -c "import sys; print(sys.argv[-1])")
+echo "GHC Version: $GHC_VERSION"
+
+$BUILDINFO_FILE="call-haskell-from-anything.buildinfo"
+touch $BUILDINFO_FILE
+echo "executable: call-haskell-from-anything.so" >> $BUILDINFO_FILE
+echo "extra-libraries: HSrts-ghc$GHC_VERSION" >> $BUILDINFO_FILE
+
 # python detect-ghc-buildinfo.py $@

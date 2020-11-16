@@ -1,5 +1,9 @@
 # call-haskell-from-anything changelog
 
+## 1.1.0.1 -- 2020-11-15
+
+* Update for ghc 8.8.4.
+
 ## 1.1.0.0 -- 2017-08-03
 
 * Backwards incompatible change! Wrappers have to be updated (see examples)

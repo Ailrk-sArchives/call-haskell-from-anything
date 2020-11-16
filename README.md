@@ -1,3 +1,11 @@
+# This is a fork of the original project.
+
+The original repo no longer compiles for GHC 8.8.4. I did some modification to make it works for now.
+
+Original repo: https://github.com/nh2/call-haskell-from-anything
+
+
+
 call-haskell-from-anything
 ==========================
 

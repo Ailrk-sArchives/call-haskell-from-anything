@@ -1,7 +1,9 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-{-# LANGUAGE DataKinds, TypeOperators #-}
-{-# LANGUAGE TypeOperators, ScopedTypeVariables, FlexibleContexts #-}
+{-# LANGUAGE DataKinds           #-}
+{-# LANGUAGE FlexibleContexts    #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeOperators       #-}
 
 -- | Easy FFI via MessagePack.
 --
@@ -29,21 +31,21 @@ module FFI.Anything.TypeUncurry.Msgpack (
 , exportIO
 ) where
 
-import           Data.ByteString (ByteString)
-import qualified Data.ByteString as BS
-import qualified Data.ByteString.Lazy as BSL
-import           Data.ByteString.Unsafe (unsafeUseAsCStringLen)
-import           Data.Int (Int64)
-import           Data.Maybe (fromMaybe)
-import qualified Data.MessagePack as MSG
+import           Data.ByteString          (ByteString)
+import qualified Data.ByteString          as BS
+import qualified Data.ByteString.Lazy     as BSL
+import           Data.ByteString.Unsafe   (unsafeUseAsCStringLen)
+import           Data.Int                 (Int64)
+import           Data.Maybe               (fromMaybe)
+import qualified Data.MessagePack         as MSG
 import           Data.Proxy
-import           Data.Storable.Endian (peekBE, pokeBE)
+import           Data.Storable.Endian     (peekBE, pokeBE)
 import           Foreign.C
-import           Foreign.Marshal.Alloc (mallocBytes)
-import           Foreign.Marshal.Utils (copyBytes)
-import           Foreign.Ptr (castPtr, plusPtr)
+import           Foreign.Marshal.Alloc    (mallocBytes)
+import           Foreign.Marshal.Utils    (copyBytes)
+import           Foreign.Ptr              (castPtr, plusPtr)
 
-import FFI.Anything.TypeUncurry
+import           FFI.Anything.TypeUncurry
 
 
 -- | Helper to allow writing a 'MSG.MessagePack' instance for 'TypeList's.
@@ -51,7 +53,7 @@ import FFI.Anything.TypeUncurry
 -- We need this because we have to call 'parseArray' at the top-level
 -- 'MSG.MessagePack' instance, but not at each function argument step.
 class MessagePackRec l where
-  fromObjectRec :: (Monad m) => [MSG.Object] -> m (TypeList l)
+  fromObjectRec :: (Monad m, MonadFail m) => [MSG.Object] -> m (TypeList l)
 
 -- | When no more types need to be unpacked, we are done.
 instance MessagePackRec '[] where
@@ -64,7 +66,7 @@ instance (MSG.MessagePack a, MessagePackRec l) => MessagePackRec (a ': l) where
   fromObjectRec _      = fail "fromObjectRec: passed object is not expected (x:xs)"
 
 -- | Parses a tuple of arbitrary size ('TypeList's) from a MessagePack array.
-getTypeListFromMsgpackArray :: forall m l . (MessagePackRec l, ParamLength l, Monad m) => MSG.Object -> m (TypeList l)
+getTypeListFromMsgpackArray :: forall m l . (MessagePackRec l, ParamLength l, Monad m, MonadFail m) => MSG.Object -> m (TypeList l)
 getTypeListFromMsgpackArray obj = case obj of
     MSG.ObjectArray v | length v == len -> fromObjectRec v
     _                                   -> fail "getTypeListFromMsgpackArray: wrong object length"

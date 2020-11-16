@@ -1,30 +1,32 @@
 name:          call-haskell-from-anything
-version:       1.1.0.0
+version:       1.1.0.1
 license:       MIT
 author:        Niklas Hambüchen (mail@nh2.me)
-maintainer:    Niklas Hambüchen (mail@nh2.me)
+maintainer:    Airlk (jimmy123good@hotmail.com)
 category:      Network
 -- We use Configure to determine the `extra-libraries: HSrts-ghc*.*.*` field.
 -- See the ./configure script.
 build-type:    Configure
 license:       MIT
 synopsis:      Call Haskell functions from other languages via serialization and dynamic libraries
-description:   FFI via serialisation. See https://github.com/nh2/call-haskell-from-anything for details.
+description:   FFI via serialisation. See https://github.com/airlk/call-haskell-from-anything for details.
 stability:     experimental
-tested-with:   GHC==8.0.2
-cabal-version: >= 1.10
-homepage:      https://github.com/nh2/call-haskell-from-anything
-bug-reports:   https://github.com/nh2/call-haskell-from-anything/issues
+tested-with:   GHC==8.8.4
+cabal-version: >=1.10
+homepage:      https://github.com/airlk/call-haskell-from-anything
+bug-reports:   https://github.com/ailrk/call-haskell-from-anything/issues
 
 
 extra-source-files:
   configure
   detect-ghc-buildinfo.py
+  test.py
+  test.rb
 
 
-source-repository head
-  type: git
-  location: git://github.com/nh2/call-haskell-from-anything.git
+-- source-repository head
+--   type: git
+--   location: git://github.com/ailrk/call-haskell-from-anything.git
 
 
 library
@@ -37,12 +39,12 @@ library
     FFI.Anything.TypeUncurry.Msgpack
     FFI.Anything.TypeUncurry.DataKinds
   build-depends:
-      base >= 4.8 && < 5
-    , bytestring >= 0.10.0.0
-    , data-msgpack >= 0.0.10
-    , storable-endian >= 0.2.6
-    , template-haskell >= 2.11.0
-    , mtl >= 2.1.2
+      base >= 4.13 && < 5
+    , bytestring
+    , data-msgpack
+    , storable-endian
+    , template-haskell
+    , mtl
   ghc-options:
     -Wall -fwarn-unused-imports
 
@@ -53,6 +55,8 @@ executable call-haskell-from-anything.so
     test
   main-is:
     Test1.hs
+
+  extra-libraries: HSrts-ghc8.8.4
   build-depends:
       call-haskell-from-anything
 
